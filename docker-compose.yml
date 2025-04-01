@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+    app:
+        image: php:8.0-fpm
+        container_name: laravel_app
+        ports:
+            - "8000:8000" # Прокси порта контейнера на порт хоста
+        volumes:
+            - .:/var/www/html # Монтирование проекта в контейнер
+        networks:
+            - app-network
+
+    mailpit:
+        image: axllent/mailpit
+        container_name: mailpit
+        ports:
+            - "8025:8025" # Веб-интерфейс Mailpit
+            - "1025:1025" # SMTP сервер
+        restart: always
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
